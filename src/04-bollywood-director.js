@@ -45,13 +45,63 @@
  *   pricer("gold", true)  // => 200 * 1.5 * 1.3 = 390
  */
 export function createDialogueWriter(genre) {
-  // Your code here
+
+  if (!["action", "romance", "comedy", "drama"].includes(genre)) {
+    return null
+  }
+
+  return (hero, villain) => {
+    
+    if (!hero || !villain || hero.trim().length == 0 || villain.trim().length == 0 ) {
+      return "..."
+    }
+    return genre == "action" ? `${hero} says: 'Tujhe toh main dekh lunga, ${villain}!'` :
+       genre == "romance" ? `${hero} whispers: '${villain}, tum mere liye sab kuch ho'` :
+       genre == "comedy" ? `${hero} laughs: '${villain} bhai, kya kar rahe ho yaar!'` :
+       genre == "drama" ? `${hero} cries: '${villain}, tune mera sab kuch cheen liya!'` : "";
+  }
+  
 }
 
 export function createTicketPricer(basePrice) {
-  // Your code here
+  if (typeof basePrice !== 'number' || basePrice <= 0) {
+    return null
+  }
+
+  return (seatType, isWeekend = false) => {
+
+    if (!['platinum', 'gold', 'silver'].includes(seatType)) {
+      return null
+    }
+
+    let finalPrice = basePrice
+    finalPrice = seatType === 'platinum' ? finalPrice*2 : seatType === 'gold' ? finalPrice*1.5 : finalPrice
+
+    if (isWeekend) {
+      finalPrice = finalPrice*1.3
+    }
+
+    return Math.round(finalPrice)
+  }
 }
 
 export function createRatingCalculator(weights) {
-  // Your code here
+  if (typeof weights !== 'object' || weights == null || weights.length == 0) {
+    return null
+  }
+
+  const {story = 0, acting = 0, direction = 0, music = 0} = weights
+
+  return (scores) => {
+
+    if (typeof scores !== 'object' || scores == null || scores.length == 0) {
+    return null
+    }
+
+    const {story: storyS = 0, acting: actingS = 0, direction: directionS = 0, music: musicS = 0} = scores
+
+    const avg = (story*storyS) + (acting*actingS) + (direction*directionS) + (music*musicS)
+
+    return Number(avg.toFixed(1))
+  }
 }

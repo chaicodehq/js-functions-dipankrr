@@ -46,17 +46,61 @@
  *   // => "Amit is coming!"
  */
 export function processGuests(guests, filterFn) {
-  // Your code here
+  if (!Array.isArray(guests) || typeof filterFn !== 'function' || filterFn == null) {
+    return []
+  }
+
+  return guests.filter(obj => filterFn(obj) == true)
 }
 
 export function notifyGuests(guests, notifyCallback) {
-  // Your code here
+  if (!Array.isArray(guests) || typeof notifyCallback !== 'function' || notifyCallback == null) {
+    return []
+  }
+
+  let result = []
+
+  // for (let index = 0; index < guests.length; index++) {
+  //     result.push(notifyCallback(guests[index]))
+  // }
+
+  // guests.forEach( (guest) => {
+  //   result.push(notifyCallback(guest))
+  // })
+
+  return guests.map(notifyCallback) 
+  // same as --> obj => { 
+  //   return notifyCallback(obj)
+  // }
 }
 
 export function handleRSVP(guest, onAccept, onDecline) {
-  // Your code here
+  if (!guest || guest == null || guest == undefined || typeof onAccept !== 'function' || typeof onDecline !== 'function' || onAccept == null || onDecline == null) {
+    return null
+  }
+
+  if (guest.rsvp === "yes") {
+    return onAccept(guest)
+  }
+
+  if (guest.rsvp === "no") {
+    return onDecline(guest)
+  }
+
+  return null
 }
 
 export function transformGuestList(guests, ...transformFns) {
-  // Your code here
+  if (!Array.isArray(guests)) {
+    return [];
+  }
+
+  let result = guests;
+
+  for (let i = 0; i < transformFns.length; i++) {
+    result = transformFns[i](result);
+  }
+
+  return result;
 }
+
